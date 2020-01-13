@@ -1,0 +1,36 @@
+#######################################
+# Syntax Coloring Map For IIS2MDC
+#######################################
+
+#######################################
+# Datatypes (KEYWORD1)
+#######################################
+
+IIS2MDCSensor	KEYWORD1
+
+#######################################
+# Methods and Functions (KEYWORD2)
+#######################################
+
+ReadID	KEYWORD2
+Enable	KEYWORD2
+Disable	KEYWORD2
+GetSensitivity	KEYWORD2
+GetOutputDataRate	KEYWORD2
+SetOutputDataRate	KEYWORD2
+GetFullScale	KEYWORD2
+SetFullScale	KEYWORD2
+GetAxes	KEYWORD2
+GetAxesRaw	KEYWORD2
+ReadReg	KEYWORD2
+WriteReg	KEYWORD2
+SetSelfTest	KEYWORD2
+GetDRDYStatus	KEYWORD2
+
+#######################################
+# Constants (LITERAL1)
+#######################################
+
+IIS2MDC_OK	LITERAL1
+IIS2MDC_ERROR	LITERAL1
+IIS2MDC_MAG_SENSITIVITY_FS_50GAUSS	LITERAL1
