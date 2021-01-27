@@ -47,93 +47,63 @@
  * @param i2c object of an helper class which handles the I2C peripheral
  * @param address the address of the component's instance
  */
-IIS2MDCSensor::IIS2MDCSensor(TwoWire *i2c, uint8_t address) : dev_i2c(i2c), address(address)
+IIS2MDCSensor::IIS2MDCSensor(TwoWire *i2c) : dev_i2c(i2c)
 {
-  dev_spi = NULL;
   reg_ctx.write_reg = IIS2MDC_io_write;
   reg_ctx.read_reg = IIS2MDC_io_read;
   reg_ctx.handle = (void *)this;
-
-  /* Enable BDU */
-  if (iis2mdc_block_data_update_set(&(reg_ctx), PROPERTY_ENABLE) != IIS2MDC_OK)
-  {
-    return ;
-  }
-
-  /* Operating mode selection - power down */
-  if (iis2mdc_operating_mode_set(&(reg_ctx), IIS2MDC_POWER_DOWN) != IIS2MDC_OK)
-  {
-    return ;
-  }
-
-  /* Output data rate selection */
-  if (iis2mdc_data_rate_set(&(reg_ctx), IIS2MDC_ODR_100Hz) != IIS2MDC_OK)
-  {
-    return ;
-  }
-
-  /* Self Test disabled. */
-  if (iis2mdc_self_test_set(&(reg_ctx), PROPERTY_DISABLE) != IIS2MDC_OK)
-  {
-    return ;
-  }
-
-  mag_is_enabled = 0;
-
-  return;
+  address = IIS2MDC_I2C_ADD;
+  mag_is_enabled = 0U;
 }
 
-/** Constructor
- * @param spi object of an helper class which handles the SPI peripheral
- * @param cs_pin the chip select pin
- * @param spi_speed the SPI speed
+/**
+ * @brief  Configure the sensor in order to be used
+ * @retval 0 in case of success, an error code otherwise
  */
-IIS2MDCSensor::IIS2MDCSensor(SPIClass *spi, int cs_pin, uint32_t spi_speed) : dev_spi(spi), cs_pin(cs_pin), spi_speed(spi_speed)
+IIS2MDCStatusTypeDef IIS2MDCSensor::begin()
 {
-  reg_ctx.write_reg = IIS2MDC_io_write;
-  reg_ctx.read_reg = IIS2MDC_io_read;
-  reg_ctx.handle = (void *)this;
-
-  // Configure CS pin
-  pinMode(cs_pin, OUTPUT);
-  digitalWrite(cs_pin, HIGH); 
-  dev_i2c = NULL;
-  address = 0;
-  
-  uint8_t data = 0x34;
-
-  if (WriteReg(IIS2MDC_CFG_REG_C, data) != IIS2MDC_OK)
-  {
-    return;
-  }
-
   /* Enable BDU */
   if (iis2mdc_block_data_update_set(&(reg_ctx), PROPERTY_ENABLE) != IIS2MDC_OK)
   {
-    return ;
+    return IIS2MDC_ERROR;
   }
 
   /* Operating mode selection - power down */
   if (iis2mdc_operating_mode_set(&(reg_ctx), IIS2MDC_POWER_DOWN) != IIS2MDC_OK)
   {
-    return ;
+    return IIS2MDC_ERROR;
   }
 
   /* Output data rate selection */
   if (iis2mdc_data_rate_set(&(reg_ctx), IIS2MDC_ODR_100Hz) != IIS2MDC_OK)
   {
-    return ;
+    return IIS2MDC_ERROR;
   }
 
   /* Self Test disabled. */
   if (iis2mdc_self_test_set(&(reg_ctx), PROPERTY_DISABLE) != IIS2MDC_OK)
   {
-    return ;
+    return IIS2MDC_ERROR;
   }
 
-  mag_is_enabled = 0;
+  mag_is_enabled = 0U;
 
-  return;
+  return IIS2MDC_OK;
+}
+
+/**
+ * @brief  Disable the sensor and relative resources
+ * @retval 0 in case of success, an error code otherwise
+ */
+IIS2MDCStatusTypeDef IIS2MDCSensor::end()
+{
+  /* Disable mag */
+  if (Disable() != IIS2MDC_OK)
+  {
+    return IIS2MDC_ERROR;
+  }
+
+  return IIS2MDC_OK;
 }
 
 /**
