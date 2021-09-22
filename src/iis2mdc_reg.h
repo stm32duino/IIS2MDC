@@ -23,7 +23,7 @@
 #define IIS2MDC_REGS_H
 
 #ifdef __cplusplus
-  extern "C" {
+extern "C" {
 #endif
 
 /* Includes ------------------------------------------------------------------*/
@@ -55,22 +55,22 @@
   *
   */
 
-typedef union{
+typedef union {
   int16_t i16bit[3];
   uint8_t u8bit[6];
 } axis3bit16_t;
 
-typedef union{
+typedef union {
   int16_t i16bit;
   uint8_t u8bit[2];
 } axis1bit16_t;
 
-typedef union{
+typedef union {
   int32_t i32bit[3];
   uint8_t u8bit[12];
 } axis3bit32_t;
 
-typedef union{
+typedef union {
   int32_t i32bit;
   uint8_t u8bit[4];
 } axis1bit32_t;
@@ -80,7 +80,7 @@ typedef union{
   *
   */
 
-typedef struct{
+typedef struct {
   uint8_t bit0       : 1;
   uint8_t bit1       : 1;
   uint8_t bit2       : 1;
@@ -104,8 +104,8 @@ typedef struct{
   *
   */
 
-typedef int32_t (*iis2mdc_write_ptr)(void *, uint8_t, uint8_t*, uint16_t);
-typedef int32_t (*iis2mdc_read_ptr) (void *, uint8_t, uint8_t*, uint16_t);
+typedef int32_t (*iis2mdc_write_ptr)(void *, uint8_t, uint8_t *, uint16_t);
+typedef int32_t (*iis2mdc_read_ptr)(void *, uint8_t, uint8_t *, uint16_t);
 
 typedef struct {
   /** Component mandatory fields **/
@@ -126,9 +126,9 @@ typedef struct {
 /** @defgroup    Generic address-data structure definition
   * @brief       This structure is useful to load a predefined configuration
   *              of a sensor.
-	*              You can create a sensor configuration by your own or using 
-	*              Unico / Unicleo tools available on STMicroelectronics
-	*              web site.
+  *              You can create a sensor configuration by your own or using
+  *              Unico / Unicleo tools available on STMicroelectronics
+  *              web site.
   *
   * @{
   *
@@ -273,7 +273,7 @@ typedef struct {
 #define IIS2MDC_TEMP_OUT_L_REG          0x6EU
 #define IIS2MDC_TEMP_OUT_H_REG          0x6FU
 
-typedef union{
+typedef union {
   iis2mdc_cfg_reg_a_t            cfg_reg_a;
   iis2mdc_cfg_reg_b_t            cfg_reg_b;
   iis2mdc_cfg_reg_c_t            cfg_reg_c;
@@ -284,9 +284,9 @@ typedef union{
   uint8_t                        byte;
 } iis2mdc_reg_t;
 
-int32_t iis2mdc_read_reg(iis2mdc_ctx_t *ctx, uint8_t reg, uint8_t* data,
+int32_t iis2mdc_read_reg(iis2mdc_ctx_t *ctx, uint8_t reg, uint8_t *data,
                          uint16_t len);
-int32_t iis2mdc_write_reg(iis2mdc_ctx_t *ctx, uint8_t reg, uint8_t* data,
+int32_t iis2mdc_write_reg(iis2mdc_ctx_t *ctx, uint8_t reg, uint8_t *data,
                           uint16_t len);
 
 float iis2mdc_from_lsb_to_mgauss(int16_t lsb);
