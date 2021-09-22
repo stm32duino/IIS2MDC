@@ -610,7 +610,7 @@ int32_t iis2mdc_temperature_raw_get(iis2mdc_ctx_t *ctx, uint8_t *buff)
 
 /**
   * @defgroup   IIS2MDC_common
-  * @brief      This section group common usefull functions
+  * @brief      This section group common useful functions
   * @{
   *
   */
