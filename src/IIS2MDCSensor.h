@@ -54,21 +54,18 @@
 
 /* Typedefs ------------------------------------------------------------------*/
 
-typedef enum
-{
+typedef enum {
   IIS2MDC_OK = 0,
-  IIS2MDC_ERROR =-1
+  IIS2MDC_ERROR = -1
 } IIS2MDCStatusTypeDef;
 
-typedef struct
-{
+typedef struct {
   int16_t x;
   int16_t y;
   int16_t z;
 } IIS2MDC_AxesRaw_t;
 
-typedef struct
-{
+typedef struct {
   int32_t x;
   int32_t y;
   int32_t z;
@@ -76,13 +73,12 @@ typedef struct
 
 
 /* Class Declaration ---------------------------------------------------------*/
-   
+
 /**
  * Abstract class of an IIS2MDC Inertial Measurement Unit (IMU) 3 axes
  * sensor.
  */
-class IIS2MDCSensor
-{
+class IIS2MDCSensor {
   public:
     IIS2MDCSensor(TwoWire *i2c);
     IIS2MDCStatusTypeDef begin();
@@ -92,16 +88,16 @@ class IIS2MDCSensor
     IIS2MDCStatusTypeDef Disable();
     IIS2MDCStatusTypeDef GetSensitivity(float *sensitivity);
     IIS2MDCStatusTypeDef GetOutputDataRate(float *odr);
-	IIS2MDCStatusTypeDef SetOutputDataRate(float odr);
-	IIS2MDCStatusTypeDef GetFullScale(int32_t *fullscale);
-	IIS2MDCStatusTypeDef SetFullScale(int32_t fullscale);
-	IIS2MDCStatusTypeDef GetAxes(int32_t *magnetic_field);
-	IIS2MDCStatusTypeDef GetAxesRaw(int16_t *value);
-	IIS2MDCStatusTypeDef ReadReg(uint8_t reg, uint8_t *data);
-	IIS2MDCStatusTypeDef WriteReg(uint8_t reg, uint8_t data);
-	IIS2MDCStatusTypeDef SetSelfTest(uint8_t val);
-	IIS2MDCStatusTypeDef GetDRDYStatus(uint8_t *status);
-    
+    IIS2MDCStatusTypeDef SetOutputDataRate(float odr);
+    IIS2MDCStatusTypeDef GetFullScale(int32_t *fullscale);
+    IIS2MDCStatusTypeDef SetFullScale(int32_t fullscale);
+    IIS2MDCStatusTypeDef GetAxes(int32_t *magnetic_field);
+    IIS2MDCStatusTypeDef GetAxesRaw(int16_t *value);
+    IIS2MDCStatusTypeDef ReadReg(uint8_t reg, uint8_t *data);
+    IIS2MDCStatusTypeDef WriteReg(uint8_t reg, uint8_t data);
+    IIS2MDCStatusTypeDef SetSelfTest(uint8_t val);
+    IIS2MDCStatusTypeDef GetDRDYStatus(uint8_t *status);
+
     /**
      * @brief Utility function to read data.
      * @param  pBuffer: pointer to data to be read.
@@ -109,7 +105,7 @@ class IIS2MDCSensor
      * @param  NumByteToRead: number of bytes to be read.
      * @retval 0 if ok, an error code otherwise.
      */
-    uint8_t IO_Read(uint8_t* pBuffer, uint8_t RegisterAddr, uint16_t NumByteToRead)
+    uint8_t IO_Read(uint8_t *pBuffer, uint8_t RegisterAddr, uint16_t NumByteToRead)
     {
       if (dev_i2c) {
         dev_i2c->beginTransmission(((uint8_t)(((address) >> 1) & 0x7F)));
@@ -118,7 +114,7 @@ class IIS2MDCSensor
 
         dev_i2c->requestFrom(((uint8_t)(((address) >> 1) & 0x7F)), (uint8_t) NumByteToRead);
 
-        int i=0;
+        int i = 0;
         while (dev_i2c->available()) {
           pBuffer[i] = dev_i2c->read();
           i++;
@@ -129,7 +125,7 @@ class IIS2MDCSensor
 
       return 1;
     }
-    
+
     /**
      * @brief Utility function to write data.
      * @param  pBuffer: pointer to data to be written.
@@ -137,7 +133,7 @@ class IIS2MDCSensor
      * @param  NumByteToWrite: number of bytes to write.
      * @retval 0 if ok, an error code otherwise.
      */
-    uint8_t IO_Write(uint8_t* pBuffer, uint8_t RegisterAddr, uint16_t NumByteToWrite)
+    uint8_t IO_Write(uint8_t *pBuffer, uint8_t RegisterAddr, uint16_t NumByteToWrite)
     {
       if (dev_i2c) {
         dev_i2c->beginTransmission(((uint8_t)(((address) >> 1) & 0x7F)));
@@ -159,23 +155,23 @@ class IIS2MDCSensor
 
     /* Helper classes. */
     TwoWire *dev_i2c;
-    
+
     /* Configuration */
     uint8_t address;
-    
+
     uint8_t mag_is_enabled;
-    
+
     iis2mdc_ctx_t reg_ctx;
-    
+
 };
 
 #ifdef __cplusplus
- extern "C" {
+extern "C" {
 #endif
-int32_t IIS2MDC_io_write( void *handle, uint8_t WriteAddr, uint8_t *pBuffer, uint16_t nBytesToWrite );
-int32_t IIS2MDC_io_read( void *handle, uint8_t ReadAddr, uint8_t *pBuffer, uint16_t nBytesToRead );
+int32_t IIS2MDC_io_write(void *handle, uint8_t WriteAddr, uint8_t *pBuffer, uint16_t nBytesToWrite);
+int32_t IIS2MDC_io_read(void *handle, uint8_t ReadAddr, uint8_t *pBuffer, uint16_t nBytesToRead);
 #ifdef __cplusplus
-  }
+}
 #endif
 
 #endif

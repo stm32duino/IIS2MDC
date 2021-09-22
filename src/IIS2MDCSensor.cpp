@@ -63,26 +63,22 @@ IIS2MDCSensor::IIS2MDCSensor(TwoWire *i2c) : dev_i2c(i2c)
 IIS2MDCStatusTypeDef IIS2MDCSensor::begin()
 {
   /* Enable BDU */
-  if (iis2mdc_block_data_update_set(&(reg_ctx), PROPERTY_ENABLE) != IIS2MDC_OK)
-  {
+  if (iis2mdc_block_data_update_set(&(reg_ctx), PROPERTY_ENABLE) != IIS2MDC_OK) {
     return IIS2MDC_ERROR;
   }
 
   /* Operating mode selection - power down */
-  if (iis2mdc_operating_mode_set(&(reg_ctx), IIS2MDC_POWER_DOWN) != IIS2MDC_OK)
-  {
+  if (iis2mdc_operating_mode_set(&(reg_ctx), IIS2MDC_POWER_DOWN) != IIS2MDC_OK) {
     return IIS2MDC_ERROR;
   }
 
   /* Output data rate selection */
-  if (iis2mdc_data_rate_set(&(reg_ctx), IIS2MDC_ODR_100Hz) != IIS2MDC_OK)
-  {
+  if (iis2mdc_data_rate_set(&(reg_ctx), IIS2MDC_ODR_100Hz) != IIS2MDC_OK) {
     return IIS2MDC_ERROR;
   }
 
   /* Self Test disabled. */
-  if (iis2mdc_self_test_set(&(reg_ctx), PROPERTY_DISABLE) != IIS2MDC_OK)
-  {
+  if (iis2mdc_self_test_set(&(reg_ctx), PROPERTY_DISABLE) != IIS2MDC_OK) {
     return IIS2MDC_ERROR;
   }
 
@@ -98,8 +94,7 @@ IIS2MDCStatusTypeDef IIS2MDCSensor::begin()
 IIS2MDCStatusTypeDef IIS2MDCSensor::end()
 {
   /* Disable mag */
-  if (Disable() != IIS2MDC_OK)
-  {
+  if (Disable() != IIS2MDC_OK) {
     return IIS2MDC_ERROR;
   }
 
@@ -113,8 +108,7 @@ IIS2MDCStatusTypeDef IIS2MDCSensor::end()
  */
 IIS2MDCStatusTypeDef IIS2MDCSensor::ReadID(uint8_t *Id)
 {
-  if (iis2mdc_device_id_get(&reg_ctx, Id) != IIS2MDC_OK)
-  {
+  if (iis2mdc_device_id_get(&reg_ctx, Id) != IIS2MDC_OK) {
     return IIS2MDC_ERROR;
   }
 
@@ -129,14 +123,12 @@ IIS2MDCStatusTypeDef IIS2MDCSensor::ReadID(uint8_t *Id)
 IIS2MDCStatusTypeDef IIS2MDCSensor::Enable()
 {
   /* Check if the component is already enabled */
-  if (mag_is_enabled == 1U)
-  {
+  if (mag_is_enabled == 1U) {
     return IIS2MDC_OK;
   }
 
   /* Output data rate selection. */
-  if (iis2mdc_operating_mode_set(&reg_ctx, IIS2MDC_CONTINUOUS_MODE) != IIS2MDC_OK)
-  {
+  if (iis2mdc_operating_mode_set(&reg_ctx, IIS2MDC_CONTINUOUS_MODE) != IIS2MDC_OK) {
     return IIS2MDC_ERROR;
   }
 
@@ -152,14 +144,12 @@ IIS2MDCStatusTypeDef IIS2MDCSensor::Enable()
 IIS2MDCStatusTypeDef IIS2MDCSensor::Disable()
 {
   /* Check if the component is already disabled */
-  if (mag_is_enabled == 0U)
-  {
+  if (mag_is_enabled == 0U) {
     return IIS2MDC_OK;
   }
 
   /* Output data rate selection - power down. */
-  if (iis2mdc_operating_mode_set(&reg_ctx, IIS2MDC_POWER_DOWN) != IIS2MDC_OK)
-  {
+  if (iis2mdc_operating_mode_set(&reg_ctx, IIS2MDC_POWER_DOWN) != IIS2MDC_OK) {
     return IIS2MDC_ERROR;
   }
 
@@ -191,13 +181,11 @@ IIS2MDCStatusTypeDef IIS2MDCSensor::GetOutputDataRate(float *Odr)
   iis2mdc_odr_t odr_low_level;
 
   /* Get current output data rate. */
-  if (iis2mdc_data_rate_get(&reg_ctx, &odr_low_level) != IIS2MDC_OK)
-  {
+  if (iis2mdc_data_rate_get(&reg_ctx, &odr_low_level) != IIS2MDC_OK) {
     return IIS2MDC_ERROR;
   }
 
-  switch (odr_low_level)
-  {
+  switch (odr_low_level) {
     case IIS2MDC_ODR_10Hz:
       *Odr = 10.0f;
       break;
@@ -236,8 +224,7 @@ IIS2MDCStatusTypeDef IIS2MDCSensor::SetOutputDataRate(float Odr)
             : (Odr <= 50.000f) ? IIS2MDC_ODR_50Hz
             :                    IIS2MDC_ODR_100Hz;
 
-  if (iis2mdc_data_rate_set(&reg_ctx, new_odr) != IIS2MDC_OK)
-  {
+  if (iis2mdc_data_rate_set(&reg_ctx, new_odr) != IIS2MDC_OK) {
     return IIS2MDC_ERROR;
   }
 
@@ -278,8 +265,7 @@ IIS2MDCStatusTypeDef IIS2MDCSensor::GetAxes(int32_t *MagneticField)
   float sensitivity;
 
   /* Read raw data values. */
-  if (iis2mdc_magnetic_raw_get(&reg_ctx, data_raw.u8bit) != IIS2MDC_OK)
-  {
+  if (iis2mdc_magnetic_raw_get(&reg_ctx, data_raw.u8bit) != IIS2MDC_OK) {
     return IIS2MDC_ERROR;
   }
 
@@ -304,8 +290,7 @@ IIS2MDCStatusTypeDef IIS2MDCSensor::GetAxesRaw(int16_t *Value)
   axis3bit16_t data_raw;
 
   /* Read raw data values. */
-  if (iis2mdc_magnetic_raw_get(&reg_ctx, data_raw.u8bit) != IIS2MDC_OK)
-  {
+  if (iis2mdc_magnetic_raw_get(&reg_ctx, data_raw.u8bit) != IIS2MDC_OK) {
     return IIS2MDC_ERROR;
   }
 
@@ -325,8 +310,7 @@ IIS2MDCStatusTypeDef IIS2MDCSensor::GetAxesRaw(int16_t *Value)
  */
 IIS2MDCStatusTypeDef IIS2MDCSensor::ReadReg(uint8_t Reg, uint8_t *Data)
 {
-  if (iis2mdc_read_reg(&reg_ctx, Reg, Data, 1) != IIS2MDC_OK)
-  {
+  if (iis2mdc_read_reg(&reg_ctx, Reg, Data, 1) != IIS2MDC_OK) {
     return IIS2MDC_ERROR;
   }
 
@@ -342,8 +326,7 @@ IIS2MDCStatusTypeDef IIS2MDCSensor::ReadReg(uint8_t Reg, uint8_t *Data)
  */
 IIS2MDCStatusTypeDef IIS2MDCSensor::WriteReg(uint8_t Reg, uint8_t Data)
 {
-  if (iis2mdc_write_reg(&reg_ctx, Reg, &Data, 1) != IIS2MDC_OK)
-  {
+  if (iis2mdc_write_reg(&reg_ctx, Reg, &Data, 1) != IIS2MDC_OK) {
     return IIS2MDC_ERROR;
   }
 
@@ -357,8 +340,7 @@ IIS2MDCStatusTypeDef IIS2MDCSensor::WriteReg(uint8_t Reg, uint8_t Data)
  */
 IIS2MDCStatusTypeDef IIS2MDCSensor::SetSelfTest(uint8_t val)
 {
-  if (iis2mdc_self_test_set(&reg_ctx, val) != IIS2MDC_OK)
-  {
+  if (iis2mdc_self_test_set(&reg_ctx, val) != IIS2MDC_OK) {
     return IIS2MDC_ERROR;
   }
 
@@ -373,8 +355,7 @@ IIS2MDCStatusTypeDef IIS2MDCSensor::SetSelfTest(uint8_t val)
  */
 IIS2MDCStatusTypeDef IIS2MDCSensor::GetDRDYStatus(uint8_t *Status)
 {
-  if (iis2mdc_mag_data_ready_get(&reg_ctx, Status) != IIS2MDC_OK)
-  {
+  if (iis2mdc_mag_data_ready_get(&reg_ctx, Status) != IIS2MDC_OK) {
     return IIS2MDC_ERROR;
   }
 
